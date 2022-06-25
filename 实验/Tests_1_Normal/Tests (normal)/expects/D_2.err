@@ -1,0 +1,3 @@
+[[[[Error type A at Line 2: Illegal FLOAT number "0.43244e5"]]]][[[[Error type B at Line 2: Unexpected 'e']]]]
+[[[[Error type A at Line 3: Illegal FLOAT number ".4e-1"]]]][[[[Error type B at Line 3: Unexpected '.']]]]
+[[[[Error type A at Line 5: Illegal FLOAT number ".3e+4"]]]][[[[Error type B at Line 5: Unexpected '.']]]]

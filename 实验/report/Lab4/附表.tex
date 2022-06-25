@@ -1,0 +1,99 @@
+\documentclass[a4paper,UTF8]{article}
+\usepackage{CJKutf8}
+\usepackage[margin=1.25in]{geometry}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{multirow}
+\usepackage{pdfpages}
+\usepackage{tikz}
+\usepackage{listings}
+\usepackage{xcolor} 
+\usepackage{longtable}
+\usetikzlibrary{arrows,automata} 
+
+%\setmainfont                    [Ligatures=TeX]{Times New Roman}
+\theoremstyle{definition}
+\newtheorem*{solution}{Solution}
+\newtheorem*{prove}{Proof}
+
+\lstset{
+	numbers=left, 
+	numberstyle=\tiny,
+	frame=shadowbox, 
+	breaklines=true, 
+	showspaces=false,
+ 	keywordstyle=\color{purple}\bfseries,
+	%identifierstyle=\color{brown!80!black},
+ 	commentstyle=\color{gray}
+	stringstyle=\color{brown!60!black},
+	rulesepcolor=\color{red!20!green!20!blue!20}
+}
+\begin{document}
+\begin{CJK}{UTF8}{gkai}
+\title{编译原理实验报告-Lab4-附表}
+\author{}
+\date{}
+\maketitle
+
+\setlength{\baselineskip}{18pt}
+\begin{longtable}{|l|l|l|l|}
+\hline
+IR Type   & IR Code                       & MIP32 Code                                                                                                                                                                                 & Comment                                                                                                                                                                                            \\ \hline
+\endfirsthead
+%
+\multicolumn{4}{c}%
+{{\bfseries Table \thetable\ continued from previous page}} \\
+\hline
+IR Type   & IR Code                       & MIP32 Code                                                                                                                                                                                 & Comment                                                                                                                                                                                            \\ \hline
+\endhead
+%
+\hline
+\endfoot
+%
+\endlastfoot
+%
+          & x := y                        & \begin{tabular}[c]{@{}l@{}}lw \$t1, -offset\_1(\$fp)\\ move \$t0, \$t1\\ sw \$t0, -offset\_2(\$fp)\end{tabular}                                                                            & \begin{tabular}[c]{@{}l@{}}offset\_1 = findOffset(y)\\ offset\_2 = findOffset(x)\end{tabular}                                                                                                      \\\cline{2-4}
+          & x := \#k                      & \begin{tabular}[c]{@{}l@{}}li \$t0, k\\ sw \$t0, -offset\_1(\$fp)\end{tabular}                                                                                                             & offset\_1 = findOffset(x)                                                                                                                                                                          \\\cline{2-4}
+          & x := *y                       & \begin{tabular}[c]{@{}l@{}}addi \$t0, \$fp, -offset\_1\\ sw \$t0, -offset\_2(\$fp)\end{tabular}                                                                                            & \begin{tabular}[c]{@{}l@{}}offset\_1 = findOffset(y)\\ offset\_2 = findOffset(x)\end{tabular}                                                                                                      \\\cline{2-4}
+ASSIGN    & *x := y                       & \begin{tabular}[c]{@{}l@{}}lw \$t1, -offset\_1(\$fp)\\ lw \$t0, -offset\_2(\$fp)\\ sw \$t1, 0(\$t0)\end{tabular}                                                                           & \begin{tabular}[c]{@{}l@{}}offset\_1 = findOffset(y)\\ offset\_2 = findOffset(x)\end{tabular}                                                                                                      \\\cline{2-4}
+          & *x := \#k                     & \begin{tabular}[c]{@{}l@{}}li \$t1, k\\ lw \$t0, -offset\_1(\$fp)\\ sw \$t1, 0(\$t0)\end{tabular}                                                                                          & offset\_1 = findOffset(x)                                                                                                                                                                          \\\cline{2-4}
+          & *x = *y                       & \begin{tabular}[c]{@{}l@{}}lw \$t0, -offset\_1(\$fp)\\ lw \$t1, -offset\_2(\$fp)\\ lw \$t1, 0(\$t1)\\ sw \$t1, 0(\$t0)\end{tabular}                                                        & \begin{tabular}[c]{@{}l@{}}offset\_1 = findOffset(x)\\ offset\_2 = findOffset(y)\end{tabular}                                                                                                      \\ \hline
+          & x = y + z                     & \begin{tabular}[c]{@{}l@{}}lw \$t1, -offset\_1(\$fp)\\ lw \$t2, -offset\_2(\$fp)\\ add \$t0, \$t1, \$t2\\ sw \$t0, -offset\_3(\$fp)\end{tabular}                                           & \begin{tabular}[c]{@{}l@{}}offset\_1 = findOffset(y)\\ offset\_2 = findOffset(z)\\ offset\_3 = findOffset(x)\end{tabular}                                                                          \\\cline{2-4}
+          & x = \&y + z                   & \begin{tabular}[c]{@{}l@{}}addi \$t1, \$fp, -offset\_1\\ lw \$t2, -offset\_2(\$fp)\\ add \$t0, \$t0, \$t2\\ sw \$t0, -offset\_3(\$fp)\end{tabular}                                         & \begin{tabular}[c]{@{}l@{}}offset\_1 = findOffset(y)\\ offset\_2 = findOffset(z)\\ offset\_3 = findOffset(x)\end{tabular}                                                                          \\\cline{2-4}
+          & x = \&y + \#k                 & \begin{tabular}[c]{@{}l@{}}addi \$t0, \$fp, k\\ sw \$t0, -offset\_1(\$fp)\end{tabular}                                                                                                     & offset\_1 = findOffset(x)                                                                                                                                                                          \\\cline{2-4}
+ADD       & x = y + \#k                   & \begin{tabular}[c]{@{}l@{}}lw \$t1, -offset\_1(\$fp)\\ addi \$t0, \$t1, k\\ sw \$t0, -offset\_2(\$fp)\end{tabular}                                                                         & \begin{tabular}[c]{@{}l@{}}offset\_1 = findOffset(y)\\ offset\_2 = findOffset(x)\end{tabular}                                                                                                      \\\cline{2-4}
+          & x = \#k + z                   & \begin{tabular}[c]{@{}l@{}}li \$t1, k\\ lw \$t2, -offset\_1(\$fp)\\ add \$t0, \$t1, \$t2\\ sw \$t0, -offset\_2(\$fp)\end{tabular}                                                          & \begin{tabular}[c]{@{}l@{}}offset\_1 = findOffset(z)\\ offset\_2 = findOffset(x)\end{tabular}                                                                                                      \\\cline{2-4}
+          & x = \#k\_1 + \#k\_2           & \begin{tabular}[c]{@{}l@{}}li \$t1, k\_1\\ addi \$t0, \$t1, k\_2\\ sw \$t0, -offset\_1(\$fp)\end{tabular}                                                                                  & offset\_1 = findOffset(x)                                                                                                                                                                          \\ \hline
+          & x = y - z                     & \begin{tabular}[c]{@{}l@{}}lw \$t1, -offset\_1(\$fp)\\ lw \$t2, -offset\_2(\$fp)\\ sub \$t0, \$t1, \$t2\\ sw \$t0, -offset\_3(\$fp)\end{tabular}                                           & \begin{tabular}[c]{@{}l@{}}offset\_1 = findOffset(y)\\ offset\_2 = findOffset(z)\\ offset\_3 = findOffset(x)\end{tabular}                                                                          \\\cline{2-4}
+SUB       & x = y - \#k                   & \begin{tabular}[c]{@{}l@{}}lw \$t1, -offset\_1(\$fp)\\ addi \$t0, \$t1, -k\\ sw \$t0, -offset\_2(\$fp)\end{tabular}                                                                        & \begin{tabular}[c]{@{}l@{}}offset\_1 = findOffset(y)\\ offset\_2 = findOffset(x)\end{tabular}                                                                                                      \\
+          & x = \#k - z                   & \begin{tabular}[c]{@{}l@{}}li \$t1, k\\ lw \$t2, -offset\_1(\$fp)\\ sub \$t0, \$t1, \$t2\\ sw \$t0, -offset\_2(\$fp)\end{tabular}                                                          & \begin{tabular}[c]{@{}l@{}}offset\_1 = findOffset(z)\\ offset\_2 = findOffset(x)\end{tabular}                                                                                                      \\\cline{2-4}
+          & x = \#k\_1 - \#k\_2           & \begin{tabular}[c]{@{}l@{}}li \$t1, k\_1\\ addi \$t0, \$t1, -k\_2\\ sw \$t0, -offset\_1(\$fp)\end{tabular}                                                                                 & offset\_1 = findOffset(x)                                                                                                                                                                          \\ \hline
+          & x = y * z                     & \begin{tabular}[c]{@{}l@{}}lw \$t1, -offset\_1(\$fp)\\ lw \$t2, -offset\_2(\$fp)\\ mul \$t0, \$t1, \$t2\\ sw \$t0, -offset\_3(\$fp)\end{tabular}                                           & \begin{tabular}[c]{@{}l@{}}offset\_1 = findOffset(y)\\ offset\_2 = findOffset(z)\\ offset\_3 = findOffset(x)\end{tabular}                                                                          \\\cline{2-4}
+MUL       & x = y * \#k                   & \begin{tabular}[c]{@{}l@{}}lw \$t1, -offset\_1(\$fp)\\ li \$t2, k\\ mul \$t0, \$t1, \$t2\\ sw \$t0, -offset\_2(\$fp)\end{tabular}                                                          & \begin{tabular}[c]{@{}l@{}}offset\_1 = findOffset(y)\\ offset\_2 = findOffset(x)\end{tabular}                                                                                                      \\\cline{2-4}
+          & x = \#k * z                   & \begin{tabular}[c]{@{}l@{}}li \$t1, k\\ lw \$t2, -offset\_1(\$fp)\\ mul \$t0, \$t1, \$t2\\ sw \$t0, -offset\_2(\$fp)\end{tabular}                                                          & \begin{tabular}[c]{@{}l@{}}offset\_1 = findOffset(z)\\ offset\_2 = findOffset(x)\end{tabular}                                                                                                      \\\cline{2-4}
+          & x = \#k\_1 * \#k\_2           & \begin{tabular}[c]{@{}l@{}}li \$t1, k\_1\\ li \$t2, k\_2\\ mul \$t0, \$t1, \$t2\\ sw \$t0, -offset\_1(\$fp)\end{tabular}                                                                   & offset\_1 = findOffset(x)                                                                                                                                                                          \\ \hline
+          & x = y / z                     & \begin{tabular}[c]{@{}l@{}}lw \$t1, -offset\_1(\$fp)\\ lw \$t2, -offset\_2(\$fp)\\ div \$t1, \$t2\\ mflo \$t0\\ sw \$t0, -offset\_3(\$fp)\end{tabular}                                     & \begin{tabular}[c]{@{}l@{}}offset\_1 = findOffset(y)\\ offset\_2 = findOffset(z)\\ offset\_3 = findOffset(x)\end{tabular}                                                                          \\\cline{2-4}
+DIV       & x = y / \#k                   & \begin{tabular}[c]{@{}l@{}}lw \$t1, -offset\_1(\$fp)\\ li \$t2, k\\ div \$t1, \$t2\\ mflo \$t0\\ sw \$t0, -offset\_3(\$fp)\end{tabular}                                                    & \begin{tabular}[c]{@{}l@{}}offset\_1 = findOffset(y)\\ offset\_2 = findOffset(x)\end{tabular}                                                                                                      \\\cline{2-4}
+          & x = \#k / z                   & \begin{tabular}[c]{@{}l@{}}lw \$t1, -offset\_1(\$fp)\\ lw \$t2, -offset\_2(\$fp)\\ div \$t1, \$t2\\ mflo \$t0\\ sw \$t0, -offset\_3(\$fp)\end{tabular}                                     & offset\_1 = findOffset(x)                                                                                                                                                                          \\\cline{2-4}
+          & x = \#k\_1 / \#k\_2           & \begin{tabular}[c]{@{}l@{}}lw \$t1, k\_1\\ lw \$t2, k\_2\\ div \$t1, \$t2\\ mflo \$t0\\ sw \$t0, -offset\_3(\$fp)\end{tabular}                                                             & \begin{tabular}[c]{@{}l@{}}offset\_1 = findOffset(y)\\ offset\_2 = findOffset(z)\\ offset\_3 = findOffset(x)\end{tabular}                                                                          \\ \hline
+FUNCTION  & FUNCTION func                 & \begin{tabular}[c]{@{}l@{}}func:\\ addi \$sp, \$sp, -4\\ sw \$fp, 0(\$sp)\\ move \$fp, \$sp\\ addi \$sp, \$sp, stackSize\end{tabular}                                                      & \begin{tabular}[c]{@{}l@{}}stackSize = funcStackSpace\\ (func-\textgreater{}next)为避免函数名与MIP32\\ 指令名称冲突除main函数外所有函数\\ 添加前\\ 缀'func\_'.\end{tabular}                                                 \\ 
+          & IF x == y GOTO z              & \begin{tabular}[c]{@{}l@{}}lw \$t1, -offset\_1(\$fp)\\ lw \$t2, -offset\_2(\$fp)\\ beq \$t1, \$t2, z\end{tabular}                                                                          & \begin{tabular}[c]{@{}l@{}}offset\_1 = findOffset(x)\\ offset\_2 = findOffset(y)\\ 若x(或y)为立即数k,那么对\$t1\\ (或\$t2)寄存器加载值的指令修改为\\ li \$t1, k\\ (li \$t2, k)\end{tabular}                              \\\cline{2-4}
+          & IF x != y GOTO z              & \begin{tabular}[c]{@{}l@{}}...\\ bne \$t1, \$t2, z\end{tabular}                                                                                                                            & 省略部分同上                                                                                                                                                                                             \\\cline{2-4}
+IF        & IF x \textgreater y GOTO z    & \begin{tabular}[c]{@{}l@{}}...\\ bgt \$t1, \$t2, z\end{tabular}                                                                                                                            & 省略部分同上                                                                                                                                                                                             \\\cline{2-4}
+          & IF x \textless y GOTO z       & \begin{tabular}[c]{@{}l@{}}...\\ blt \$t1, \$t2, z\end{tabular}                                                                                                                            & 省略部分同上                                                                                                                                                                                             \\\cline{2-4}
+          & IF x \textgreater{}= y GOTO z & \begin{tabular}[c]{@{}l@{}}...\\ bne \$t1, \$t2, z\end{tabular}                                                                                                                            & 省略部分同上                                                                                                                                                                                             \\\cline{2-4}
+          & IF x \textless{}= y GOTO z    & \begin{tabular}[c]{@{}l@{}}...\\ bne \$t1, \$t2, z\end{tabular}                                                                                                                            & 省略部分同上                                                                                                                                                                                             \\\cline{2-4} \hline
+GOTO      & GOTO x                        & j x                                                                                                                                                                                        &                                                                                                                                                                                                    \\ \hline
+PARAMETER & PARAM x                       & \begin{tabular}[c]{@{}l@{}}lw \$t0, offset\_1(\$fp)\\ sw \$t0, -offset\_2(\$fp)\end{tabular}                                                                                               & \begin{tabular}[c]{@{}l@{}}offset\_1 = i * 4\\ offset\_2 = findOffset(x)\\ 其中, i为当前参数在该函数定义中\\ 的序.这是因为在调用者方面参数是\\ 按序压栈的.\end{tabular}                                                              \\ \hline
+CALL      & x := CALL func                & \begin{tabular}[c]{@{}l@{}}addi \$sp, \$sp, -4\\ sw \$ra, 0(\$sp)\\ jal func\\ lw \$ra, 0(\$sp)\\ addi \$sp, \$sp, 4\\ sw \$v0, -offset\_1(\$fp)\\ addi \$sp, \$sp, stackSize\end{tabular} & \begin{tabular}[c]{@{}l@{}}保存\$ra旧值\\ 跳转\\ 恢复\$ra旧值\\ 归还为保存\$ra申请的栈空间\\ 取出返回值并赋值给x\\ 归还为传参申请的栈空间.\\ offset\_1 = findOffset(x)\\ 根据假设6:\\ stackSize = 4 * argc\\ 其中, argc为函数func的参数个数.\end{tabular} \\ \hline
+ARG       & ARG x                         & \begin{tabular}[c]{@{}l@{}}addi \$sp, \$sp, -4\\ lw \$t0, -offset\_1(\$fp)\\ sw \$t0, 0(\$sp)\end{tabular}                                                                                 & \begin{tabular}[c]{@{}l@{}}根据假设6,每个参数在栈中分配4字\\ 节空间.\\ offset\_1 = findOffset(x)\\ 如果x是常数k, 那么lw指令修改为\\ li \$t0, k\end{tabular}                                                                     \\ \hline
+READ      & x := CALL READ                & \begin{tabular}[c]{@{}l@{}}addi \$sp, \$sp, -4\\ sw \$ra, 0(\$sp)\\ jal read\\ lw \$ra, 0(\$sp)\\ addi \$sp, \$sp, 4\\ sw \$v0, -offset\_1(\$fp)\end{tabular}                              & offset\_1 = findOffset(x)                                                                                                                                                                          \\ \hline
+WRITE     & WRITE x                       & \begin{tabular}[c]{@{}l@{}}lw \$a0, -offset\_1(\$fp)\\ addi \$sp, \$sp, -4\\ sw \$ra, 0(\$sp)\\ jal write\\ lw \$ra, 0(\$sp)\\ addi \$sp, \$sp, 4\end{tabular}                             & \begin{tabular}[c]{@{}l@{}}offset\_1 = findOffset(x)\\ 如果x是常数k, 那么lw指令修改为\\ li \$t0, k\end{tabular}                                                                                                \\ \hline
+RETURN    & RETURN x                      & \begin{tabular}[c]{@{}l@{}}lw \$v0, -offset\_1(\$fp)\\ addi \$sp, \$fp, 4\\ lw \$fp, 0(\$fp)\\ jr \$ra\end{tabular}                                                                        & \begin{tabular}[c]{@{}l@{}}offset\_1 = findOffset(x)\\ 如果x是常数k, 那么lw指令修改为\\ li \$t0, k\end{tabular}                                                                                                \\ \hline
+\end{longtable}
+
+\end{CJK}
+\end{document}

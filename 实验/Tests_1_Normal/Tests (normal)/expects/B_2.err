@@ -1,0 +1,4 @@
+Error type B at Line 7: Defition of an array only accepts an INT dimension
+Error type B at Line 19: Illegal declaration
+Error type B at Line 23: Unexpected "="
+[[[[Error type B at Line 39: Missing ";"]]]][[[[Error type B at Line 40: Missing ";"]]]]
